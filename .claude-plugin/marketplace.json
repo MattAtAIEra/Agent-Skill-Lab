@@ -1,0 +1,28 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "agent-skill-lab",
+  "description": "Internal plugins for development conventions, SQL DDL standards, and plugin authoring guidance",
+  "owner": {
+    "name": "Matt"
+  },
+  "plugins": [
+    {
+      "name": "dev-discipline",
+      "description": "Development discipline rules covering API development workflow, command execution conventions, and dev log writing standards",
+      "source": "./plugins/dev-discipline",
+      "category": "development"
+    },
+    {
+      "name": "sql-ddl-convention",
+      "description": "SQL DDL schema convention rules with audit fields, indexing strategy, naming standards, and Mermaid ER diagram generation",
+      "source": "./plugins/sql-ddl-convention",
+      "category": "development"
+    },
+    {
+      "name": "skill-and-agent-authoring",
+      "description": "Definitive guide for authoring Claude Code plugin skills and agents with correct YAML frontmatter, file structure, and common mistake prevention",
+      "source": "./plugins/skill-and-agent-authoring",
+      "category": "development"
+    }
+  ]
+}

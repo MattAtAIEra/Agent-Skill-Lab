@@ -1,0 +1,8 @@
+{
+  "name": "sql-ddl-convention",
+  "version": "1.0.0",
+  "description": "SQL DDL schema convention rules with audit fields, indexing strategy, and naming standards",
+  "author": {
+    "name": "Matt"
+  }
+}

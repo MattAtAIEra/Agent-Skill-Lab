@@ -1,0 +1,8 @@
+{
+  "name": "dev-discipline",
+  "version": "1.0.0",
+  "description": "開發紀律 plugin：API 開發流程、指令執行規範、開發日誌撰寫",
+  "author": {
+    "name": "Matt"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "name": "skill-and-agent-authoring",
+  "version": "1.0.0",
+  "description": "Definitive guide for authoring Claude Code plugin skills and agents with correct YAML frontmatter, file structure, and common mistake prevention",
+  "author": {
+    "name": "Matt"
+  }
+}
