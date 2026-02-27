@@ -6,7 +6,7 @@
 
 ```bash
 # 1. 加入此 marketplace（一次性）
-claude plugin marketplace add git@github.com:your-org/agent-skill-lab.git
+claude plugin marketplace add https://github.com/MattAtAIEra/Agent-Skill-Lab.git
 
 # 2. 安裝需要的 plugin
 claude plugin install dev-discipline@agent-skill-lab
