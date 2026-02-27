@@ -4,122 +4,122 @@ description: This skill should be used when "completing a development phase", "f
 version: 1.0.0
 ---
 
-# 開發日誌紀律
+# Dev Log Discipline
 
-每個開發階段完成時，將工作摘要寫入 `doc/dev-log.md`，確保開發歷程可追溯、可回顧。
+At the end of each development phase, write a work summary to `doc/dev-log.md` to ensure the development history is traceable and reviewable.
 
-## 何時撰寫
+## When to Write
 
-在以下時機點撰寫或更新開發日誌：
+Write or update the dev log at these points:
 
-- 一個功能模組開發完成時
-- 一個 bug 修復完成時
-- 一個重構作業完成時
-- 測試撰寫完成且通過時
-- 文件產出完成時
-- 發現並修正重大問題時
-- 每次對話結束前（如有實質開發工作）
+- When a feature module is completed
+- When a bug fix is completed
+- When a refactoring task is completed
+- When tests are written and passing
+- When documentation is generated
+- When a major issue is discovered and fixed
+- Before the end of each conversation (if substantive development work was done)
 
-## 日誌格式
+## Log Entry Format
 
-每個階段的日誌條目使用以下格式：
+Each phase entry uses the following format:
 
 ```markdown
-## Phase N：簡短標題
+## Phase N: Brief Title
 
-**日期**：YYYY-MM-DD
-**觸發**：什麼原因開始這個階段（用戶指示、bug 回報、規格變更等）
+**Date**: YYYY-MM-DD
+**Trigger**: What initiated this phase (user instruction, bug report, spec change, etc.)
 
-### 完成項目
+### Completed Items
 
-依類別列出完成的工作：
+List completed work by category:
 
-1. **類別名稱**（如：Schema 變更、API 開發、測試）
-   - 具體項目 1
-   - 具體項目 2
+1. **Category Name** (e.g., Schema Changes, API Development, Testing)
+   - Specific item 1
+   - Specific item 2
 
-### 發現與修正（如有）
+### Discoveries & Fixes (if any)
 
-記錄開發過程中遇到的問題：
+Record issues encountered during development:
 
-- **問題描述**：什麼現象
-- **原因**：根本原因分析
-- **修正**：如何解決
-- **教訓**：未來如何避免
+- **Symptom**: What was observed
+- **Cause**: Root cause analysis
+- **Fix**: How it was resolved
+- **Lesson**: How to prevent it in the future
 
-### 測試結果
+### Test Results
 
-- 單元測試：X/Y 通過
-- 整合測試：X/Y 通過
-- Build：成功/失敗
+- Unit tests: X/Y passed
+- Integration tests: X/Y passed
+- Build: success/failure
 ```
 
-## 日誌內容要求
+## Content Requirements
 
-### 必須包含
+### Must Include
 
-- 階段編號與標題
-- 日期
-- 觸發原因
-- 完成項目清單（含檔案路徑）
-- 測試結果
+- Phase number and title
+- Date
+- Trigger reason
+- Completed items list (with file paths)
+- Test results
 
-### 應該包含
+### Should Include
 
-- 發現的問題與修正方式
-- 對其他模組的影響
-- 待辦事項或後續工作
+- Issues discovered and how they were fixed
+- Impact on other modules
+- Remaining TODOs or follow-up work
 
-### 避免包含
+### Avoid Including
 
-- 過於瑣碎的操作細節（如「安裝了某個套件」）
-- 重複的程式碼（用檔案路徑代替）
-- 主觀評價或情緒描述
+- Overly trivial operational details (e.g., "installed a package")
+- Duplicate code (use file paths instead)
+- Subjective opinions or emotional descriptions
 
-## 檔案位置與結構
+## File Location and Structure
 
-開發日誌檔案位於 `doc/dev-log.md`。結構如下：
+The dev log file is located at `doc/dev-log.md`. Structure:
 
 ```markdown
-# {專案名稱} 開發日誌
+# {Project Name} Dev Log
 
-> 本文件記錄每個開發階段的工作摘要，供回顧與追蹤。
+> This document records a work summary for each development phase, for review and tracking.
 
 ---
 
-## Phase 1：...
-## Phase 2：...
+## Phase 1: ...
+## Phase 2: ...
 ...
 
 ---
 
-## 待辦
+## TODO
 
-- [ ] 尚未完成的項目
-- [x] 已完成的項目
+- [ ] Items not yet completed
+- [x] Completed items
 ```
 
-## 操作流程
+## Procedure
 
-1. 讀取現有的 `doc/dev-log.md`（如果存在）
-2. 確認目前最新的 Phase 編號
-3. 在檔案末尾（待辦區段之前）追加新的 Phase 條目
-4. 更新待辦區段
-5. 儲存檔案
+1. Read the existing `doc/dev-log.md` (if it exists)
+2. Determine the current latest Phase number
+3. Append the new Phase entry before the TODO section
+4. Update the TODO section
+5. Save the file
 
-如果 `doc/dev-log.md` 不存在，建立新檔案並從 Phase 1 開始。
+If `doc/dev-log.md` does not exist, create a new file starting from Phase 1.
 
-## 與其他紀律的關聯
+## Relationship with Other Disciplines
 
-- **api-dev-workflow**：API 開發完成時，在日誌中記錄新增/修改的端點清單
-- **command-execution**：遇到指令執行問題時，在「發現與修正」區段記錄
+- **api-dev-workflow**: When API development is complete, record the list of new/modified endpoints in the log
+- **command-execution**: When command execution issues are encountered, record them in the "Discoveries & Fixes" section
 
-## 品質標準
+## Quality Standard
 
-一份好的開發日誌條目應該讓一個完全不了解專案的人（或未來的 AI agent）能夠：
+A good dev log entry should enable someone completely unfamiliar with the project (or a future AI agent) to:
 
-1. 理解這個階段做了什麼
-2. 知道改了哪些檔案
-3. 了解為什麼做這些改動
-4. 知道目前的測試狀態
-5. 了解有什麼已知問題或待辦事項
+1. Understand what was done in this phase
+2. Know which files were changed
+3. Understand why these changes were made
+4. Know the current test status
+5. Be aware of any known issues or remaining TODOs

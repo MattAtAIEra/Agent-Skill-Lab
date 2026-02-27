@@ -6,138 +6,138 @@ version: 1.0.0
 
 # SQL DDL Convention
 
-當使用者要求建立資料表、設計 schema、撰寫 DDL、或討論資料庫結構設計時，**必須遵循以下規範**。
+When the user requests creating tables, designing schemas, writing DDL, or discussing database structure design, **the following conventions must be followed**.
 
 ---
 
-## 1. 主鍵規則
+## 1. Primary Key Rules
 
-- 所有表的主鍵欄位名為 `id`，型別 `BIGINT`
-- 不使用自然鍵作為主鍵
+- All tables use `id` as the primary key column, type `BIGINT`
+- Do not use natural keys as primary keys
 
-## 2. 審計欄位（每表必備）
+## 2. Audit Fields (Required for Every Table)
 
-每張一般表（非 many-to-many 關聯表）必須包含以下欄位：
+Every regular table (excluding many-to-many join tables) must include the following columns:
 
-| 欄位名 | 型別 | 約束 | 說明 |
+| Column | Type | Constraints | Description |
 |---|---|---|---|
-| `creator` | BIGINT | NOT NULL | 建立者 ID |
-| `createDate` | DATETIME | NOT NULL, DEFAULT CURRENT_TIMESTAMP | 建立時間 |
-| `modifier` | BIGINT | NOT NULL | 修改者 ID |
-| `modifyDate` | DATETIME | NOT NULL, DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP | 修改時間（依 RDBMS 語法調整） |
-| `removed` | BOOLEAN | NOT NULL, DEFAULT FALSE | 軟刪除標記 |
+| `creator` | BIGINT | NOT NULL | Creator user ID |
+| `createDate` | DATETIME | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Creation timestamp |
+| `modifier` | BIGINT | NOT NULL | Last modifier user ID |
+| `modifyDate` | DATETIME | NOT NULL, DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP | Modification timestamp (adjust syntax per RDBMS) |
+| `removed` | BOOLEAN | NOT NULL, DEFAULT FALSE | Soft-delete flag |
 
-## 3. 外鍵規則
+## 3. Foreign Key Rules
 
-- 外鍵欄位命名為 `<tableName>_id`，型別 `BIGINT`
-- **不建立 FK constraint**（外鍵約束由應用層負責）
-- 外鍵欄位必須建立索引
+- Foreign key columns are named `<tableName>_id`, type `BIGINT`
+- **Do not create FK constraints** (foreign key enforcement is the application layer's responsibility)
+- Foreign key columns must be indexed
 
-## 4. 索引規則
+## 4. Index Rules
 
-以下欄位**必須**建立索引：
+The following columns **must** be indexed:
 
-- `id`（PK 自帶，無需額外建立）
-- `creator`、`createDate`、`modifier`、`modifyDate`、`removed`
-- 所有外鍵欄位（`<tableName>_id`）
+- `id` (comes with PK, no additional index needed)
+- `creator`, `createDate`, `modifier`, `modifyDate`, `removed`
+- All foreign key columns (`<tableName>_id`)
 
-索引命名規範：`idx_<tableName>_<columnName>`
+Index naming convention: `idx_<tableName>_<columnName>`
 
-INDEX 語句須**獨立於 CREATE TABLE 之外**建立。
+INDEX statements must be created **outside of the CREATE TABLE statement**.
 
-## 5. 禁用資料庫特有功能
+## 5. No Database-Specific Features
 
-DDL 須保持**跨 RDBMS 可移植性**，禁止使用：
+DDL must maintain **cross-RDBMS portability**. Do not use:
 
-- MSSQL Temporal Table / History 機制
-- PostgreSQL ARRAY、JSONB 等專有型別
+- MSSQL Temporal Tables / History mechanisms
+- PostgreSQL ARRAY, JSONB, or other proprietary types
 - MySQL SPATIAL INDEX
-- 其他特定資料庫獨有的型別或機制
+- Any other database-specific types or mechanisms
 
-僅使用 ANSI SQL 標準或廣泛支援的語法。
+Use only ANSI SQL standard or widely supported syntax.
 
-## 6. Many-to-Many 關聯表規則
+## 6. Many-to-Many Join Table Rules
 
-- 建立獨立的 relation table 來表達多對多關係
-- 關聯表**不需要** `id`、`creator`、`createDate`、`modifier`、`modifyDate`、`removed` 欄位
-- 僅包含兩個 `<tableName>_id` 欄位，組成**複合主鍵（Composite PK）**
-- 兩個關聯欄位皆須建立索引
-- 表名格式：`<tableA>_<tableB>`（如 `user_role`）
+- Create a dedicated relation table to represent many-to-many relationships
+- Join tables **do not need** `id`, `creator`, `createDate`, `modifier`, `modifyDate`, `removed` columns
+- Include only two `<tableName>_id` columns forming a **composite primary key**
+- Both columns must be indexed
+- Table naming format: `<tableA>_<tableB>` (e.g., `user_role`)
 
-## 7. NOT NULL 原則
+## 7. NOT NULL by Default
 
-- 欄位預設為 `NOT NULL`
-- 僅在業務邏輯明確需要 NULL 時才允許 nullable，並以註解說明原因
+- Columns default to `NOT NULL`
+- Only allow nullable when the business logic explicitly requires NULL, with a comment explaining the reason
 
-## 8. 命名規範
+## 8. Naming Conventions
 
-| 項目 | 規則 | 範例 |
+| Item | Rule | Example |
 |---|---|---|
-| 表名 | 單數 + camelCase | `userProfile`、`orderItem` |
-| 欄位名 | camelCase | `createDate`、`firstName` |
-| 索引名 | `idx_<tableName>_<columnName>` | `idx_userProfile_creator` |
+| Table name | Singular + camelCase | `userProfile`, `orderItem` |
+| Column name | camelCase | `createDate`, `firstName` |
+| Index name | `idx_<tableName>_<columnName>` | `idx_userProfile_creator` |
 
-## 9. 金額欄位
+## 9. Monetary Columns
 
-- 使用 `DECIMAL` 型別（須指定精度，如 `DECIMAL(19,4)`）
-- **禁止** FLOAT / DOUBLE 儲存金額
+- Use `DECIMAL` type (must specify precision, e.g., `DECIMAL(19,4)`)
+- **Do not** use FLOAT / DOUBLE for monetary values
 
-## 10. 禁用 ENUM
+## 10. No ENUMs
 
-- 不使用資料庫 ENUM 型別
-- 改用應用層常數或建立獨立的參照表（reference table）
+- Do not use database ENUM types
+- Use application-layer constants or create a separate reference table instead
 
-## 11. 審計欄位預設值
+## 11. Audit Field Defaults
 
-- `createDate`：`DEFAULT CURRENT_TIMESTAMP`
-- `modifyDate`：`DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP`
-  - 若目標 RDBMS 不支援 `ON UPDATE`，以註解標示需由應用層處理
+- `createDate`: `DEFAULT CURRENT_TIMESTAMP`
+- `modifyDate`: `DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP`
+  - If the target RDBMS does not support `ON UPDATE`, add a comment indicating the application layer must handle this
 
-## 12. 軟刪除查詢提醒
+## 12. Soft-Delete Query Reminder
 
-- 產出 DDL 時附帶提醒：所有查詢預設須加 `WHERE removed = FALSE`
-- 除非使用者明確要查詢已刪除資料
+- When outputting DDL, include a reminder: all queries should default to `WHERE removed = FALSE`
+- Unless the user explicitly needs to query deleted records
 
-## 13. 字串欄位
+## 13. String Columns
 
-- `VARCHAR` 必須指定明確長度上限（如 `VARCHAR(255)`）
-- 長文本使用 `TEXT` 型別
+- `VARCHAR` must specify an explicit length limit (e.g., `VARCHAR(255)`)
+- Use `TEXT` type for long text content
 
-## 14. ID 類型一致性
+## 14. ID Type Consistency
 
-- 所有 ID 類欄位統一使用 `BIGINT`：主鍵 `id`、外鍵 `<tableName>_id`、`creator`、`modifier`
+- All ID-type columns use `BIGINT` uniformly: primary key `id`, foreign keys `<tableName>_id`, `creator`, `modifier`
 
-## 15. Mermaid ER Diagram 產出
+## 15. Mermaid ER Diagram Output
 
-產出 DDL 時，**必須同時產出對應的 Mermaid erDiagram 語法**，用於文件與視覺化。
+When outputting DDL, **a corresponding Mermaid erDiagram must also be generated** for documentation and visualization.
 
-### Mermaid 產出規則
+### Mermaid Output Rules
 
-- 每張表以 entity 呈現，列出所有欄位（含型別與 PK/FK 標記）
-- 審計欄位（`creator`、`createDate`、`modifier`、`modifyDate`、`removed`）**省略不列**，以保持圖表簡潔
-- 表間關聯使用 Mermaid relationship 語法表達
-- Many-to-Many 透過 join table 拆成兩個 one-to-many 關聯
+- Each table is rendered as an entity, listing all columns (with types and PK/FK markers)
+- Audit fields (`creator`, `createDate`, `modifier`, `modifyDate`, `removed`) are **omitted** to keep diagrams clean
+- Table relationships use Mermaid relationship syntax
+- Many-to-many relationships are split into two one-to-many relationships via the join table
 
-### Mermaid Relationship 語法
+### Mermaid Relationship Syntax
 
-| 符號 | 意義 |
-|------|------|
-| `\|\|--o{` | one-to-many（一對多） |
-| `\|\|--\|\|` | one-to-one（一對一） |
-| `\|\|--\|{` | one-to-many（一對多，必須存在） |
-| `o{--o{` | many-to-many（透過 join table 拆解） |
+| Symbol | Meaning |
+|--------|---------|
+| `\|\|--o{` | one-to-many |
+| `\|\|--\|\|` | one-to-one |
+| `\|\|--\|{` | one-to-many (mandatory) |
+| `o{--o{` | many-to-many (split via join table) |
 
-### Mermaid 欄位標記
+### Mermaid Column Markers
 
-- `PK` — 主鍵
-- `FK` — 外鍵
-- 型別使用簡化名稱：`bigint`、`varchar`、`datetime`、`boolean`、`decimal`、`text`
+- `PK` — Primary key
+- `FK` — Foreign key
+- Types use shorthand: `bigint`, `varchar`, `datetime`, `boolean`, `decimal`, `text`
 
 ---
 
-## DDL 產出模板
+## DDL Output Template
 
-### 一般表範例
+### Regular Table Example
 
 ```sql
 CREATE TABLE userProfile (
@@ -164,7 +164,7 @@ CREATE INDEX idx_userProfile_modifyDate ON userProfile (modifyDate);
 CREATE INDEX idx_userProfile_removed ON userProfile (removed);
 ```
 
-### Many-to-Many 關聯表範例
+### Many-to-Many Join Table Example
 
 ```sql
 CREATE TABLE user_role (
@@ -178,9 +178,9 @@ CREATE INDEX idx_user_role_user_id ON user_role (user_id);
 CREATE INDEX idx_user_role_role_id ON user_role (role_id);
 ```
 
-### Mermaid ER Diagram 範例
+### Mermaid ER Diagram Example
 
-以下對應上方 DDL 範例中的 `userProfile`、`department`、`role` 以及 many-to-many 關聯：
+The following corresponds to the DDL examples above for `userProfile`, `department`, `role`, and the many-to-many join:
 
 ```mermaid
 erDiagram
@@ -212,33 +212,33 @@ erDiagram
     }
 ```
 
-**注意事項：**
-- 審計欄位（creator、createDate、modifier、modifyDate、removed）不在 ER Diagram 中呈現
-- Many-to-Many 關係透過 join table（`user_role`）拆成兩個 one-to-many
-- 欄位型別使用簡化名稱（`bigint` 而非 `BIGINT NOT NULL`）
-- join table 的欄位僅標記 `FK`，不標記 `PK`（雖然實際是 composite PK）
+**Notes:**
+- Audit fields (creator, createDate, modifier, modifyDate, removed) are not shown in the ER Diagram
+- Many-to-many relationships are expressed through a join table (`user_role`) split into two one-to-many relationships
+- Column types use shorthand (`bigint` instead of `BIGINT NOT NULL`)
+- Join table columns are marked only as `FK`, not `PK` (even though they form a composite PK in practice)
 
 ---
 
-## 驗證檢查清單
+## Verification Checklist
 
-產出 DDL 後，逐項確認：
+After generating DDL, verify each item:
 
-- [ ] 主鍵為 `id BIGINT`
-- [ ] 包含全部 5 個審計欄位（`creator`、`createDate`、`modifier`、`modifyDate`、`removed`）
-- [ ] 審計欄位預設值正確
-- [ ] 外鍵欄位命名為 `<tableName>_id`，無 FK constraint
-- [ ] 所有必要欄位皆建立索引（獨立 CREATE INDEX 語句）
-- [ ] 索引命名符合 `idx_<tableName>_<columnName>` 格式
-- [ ] 欄位預設 NOT NULL
-- [ ] 表名單數 + camelCase
-- [ ] 欄位名 camelCase
-- [ ] 無 ENUM、FLOAT/DOUBLE 金額、資料庫專有功能
-- [ ] VARCHAR 有明確長度上限
-- [ ] Many-to-Many 表使用複合主鍵，無審計欄位
-- [ ] 附帶軟刪除查詢提醒
-- [ ] 產出對應的 Mermaid erDiagram
-- [ ] Mermaid 中省略審計欄位
-- [ ] Mermaid 中 Many-to-Many 透過 join table 表達
+- [ ] Primary key is `id BIGINT`
+- [ ] All 5 audit fields included (`creator`, `createDate`, `modifier`, `modifyDate`, `removed`)
+- [ ] Audit field defaults are correct
+- [ ] Foreign key columns named `<tableName>_id`, no FK constraints
+- [ ] All required columns are indexed (separate CREATE INDEX statements)
+- [ ] Index names follow `idx_<tableName>_<columnName>` format
+- [ ] Columns default to NOT NULL
+- [ ] Table names are singular + camelCase
+- [ ] Column names are camelCase
+- [ ] No ENUMs, FLOAT/DOUBLE for money, or database-specific features
+- [ ] VARCHAR has explicit length limits
+- [ ] Many-to-many tables use composite PK, no audit fields
+- [ ] Soft-delete query reminder included
+- [ ] Corresponding Mermaid erDiagram generated
+- [ ] Audit fields omitted from Mermaid diagram
+- [ ] Many-to-many expressed via join table in Mermaid
 
-> **提醒**: 所有對此表的查詢預設應包含 `WHERE removed = FALSE`，除非明確需要查詢已刪除資料。
+> **Reminder**: All queries against these tables should default to `WHERE removed = FALSE`, unless explicitly querying deleted records.
