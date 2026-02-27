@@ -5,6 +5,14 @@
 <h3 align="center">Curated Claude Code plugins that give your AI agent real engineering discipline.</h3>
 
 <p align="center">
+  <strong>English</strong> &bull;
+  <a href="README_zh_TW.md">繁體中文</a> &bull;
+  <a href="README_ja.md">日本語</a> &bull;
+  <a href="README_de.md">Deutsch</a> &bull;
+  <a href="README_ko.md">한국어</a>
+</p>
+
+<p align="center">
   <a href="#installation">Install in 30 seconds</a> &bull;
   <a href="#plugins">Browse Plugins</a> &bull;
   <a href="#contributing">Contribute</a>
