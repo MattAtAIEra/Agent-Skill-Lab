@@ -1,6 +1,6 @@
 # Agent Skill Lab
 
-公司內部 Claude Code plugin marketplace，包含團隊共用的開發規範與工具。
+規範AI Agent 開發紀律(Agent Dispiline)，把各項指引做成 Claude Code plugin marketplace，方便工程師指揮AI有紀律的開發。內容包含您的 AI團隊共用的開發規範與工具。
 
 ## 安裝方式
 
