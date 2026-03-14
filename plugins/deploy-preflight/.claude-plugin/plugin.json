@@ -1,0 +1,8 @@
+{
+  "name": "deploy-preflight",
+  "version": "1.0.0",
+  "description": "Production 部署前環境檢查：自動診斷目標主機資源並在部署腳本中加入防護措施",
+  "author": {
+    "name": "Matt"
+  }
+}
