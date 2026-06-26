@@ -1,0 +1,19 @@
+/* Theme: corporate — professional B2B, clean, neutral */
+/* For internal training, sales decks, leadership updates, investor explainers. */
+
+:root {
+  --primary: #1E3A8A;     /* navy */
+  --secondary: #3B82F6;   /* blue */
+  --accent: #DC2626;      /* warning red */
+  --warn: #F59E0B;        /* amber */
+  --cream: #F9FAFB;       /* off-white */
+  --ink: #111827;         /* near-black */
+  --dim: #6B7280;         /* gray */
+  --white: #ffffff;
+  --display-font: "Helvetica Neue", "Arial", "PingFang TC",
+                  "Microsoft JhengHei", sans-serif;
+}
+
+/* Tighter, more formal */
+.scene-title .display, .scene-outro .display { font-weight: 700 !important; letter-spacing: -1px; }
+.card, .panel, .callout { border-radius: 8px !important; }

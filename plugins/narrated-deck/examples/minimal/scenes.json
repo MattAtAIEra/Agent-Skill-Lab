@@ -1,0 +1,67 @@
+{
+  "scenes": [
+    {
+      "id": "s01",
+      "type": "title",
+      "label": "開場",
+      "props": {
+        "eyebrow": "BEDTIME STORY",
+        "display": "小狐狸 <span class='accent'>找月亮</span>",
+        "tagline": "一個關於好奇心的睡前故事",
+        "series": "narrated-deck ‧ 兒童示範"
+      }
+    },
+    {
+      "id": "s02",
+      "type": "generic",
+      "label": "介紹小狐狸",
+      "props": {
+        "eyebrow": "第一幕",
+        "title": "森林裡的小米",
+        "lead": "牠是一隻好奇心很重的小狐狸，喜歡晚上出來探險。"
+      }
+    },
+    {
+      "id": "s03",
+      "type": "generic",
+      "label": "發現月亮",
+      "props": {
+        "eyebrow": "第二幕",
+        "title": "那是什麼？",
+        "lead": "天上有個圓圓亮亮的東西，小米沒看過。"
+      }
+    },
+    {
+      "id": "s04",
+      "type": "cards-2",
+      "label": "媽媽說明",
+      "props": {
+        "eyebrow": "第三幕",
+        "title": "媽媽告訴小米",
+        "cards": [
+          {"num": "🌙", "title": "那是月亮", "body": "天上的明亮夥伴"},
+          {"num": "💤", "title": "陪大家睡覺", "body": "每天晚上都會出現"}
+        ]
+      }
+    },
+    {
+      "id": "s05",
+      "type": "generic",
+      "label": "小米明白了",
+      "props": {
+        "eyebrow": "第四幕",
+        "title": "原來如此",
+        "lead": "月亮一直都在天上，看著小米和所有小朋友。"
+      }
+    },
+    {
+      "id": "s06",
+      "type": "outro",
+      "label": "晚安",
+      "props": {
+        "display": "晚安，<span class='accent'>小米</span><br>晚安，月亮",
+        "next": "故事說完了，該睡覺囉。"
+      }
+    }
+  ]
+}

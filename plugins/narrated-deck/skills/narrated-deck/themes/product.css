@@ -1,0 +1,19 @@
+/* Theme: product — modern, marketing-friendly, confident */
+/* For SaaS demos, product walkthroughs, feature explainers, sales enablement. */
+
+:root {
+  --primary: #4F46E5;     /* indigo — modern tech */
+  --secondary: #38BDF8;   /* sky — supporting */
+  --accent: #F43F5E;      /* rose — CTA / important */
+  --warn: #FBBF24;        /* amber — highlight */
+  --cream: #F8FAFC;       /* near-white */
+  --ink: #0F172A;         /* slate */
+  --dim: #64748B;         /* slate dim */
+  --white: #ffffff;
+  --display-font: "Inter", "SF Pro Display", "PingFang TC", "Microsoft JhengHei",
+                  -apple-system, sans-serif;
+}
+
+/* Slightly more refined cards in product context */
+.card, .panel, .callout { border-radius: 16px !important; }
+.btn { border-radius: 8px !important; }

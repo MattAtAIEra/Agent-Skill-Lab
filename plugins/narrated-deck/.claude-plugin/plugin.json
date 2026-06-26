@@ -1,0 +1,22 @@
+{
+  "name": "narrated-deck",
+  "version": "0.2.0",
+  "description": "Turn a PPT/PDF (or any outline) into a self-contained narrated HTML page — per-subtitle TTS audio, scene-based visual transitions, and a built-in player. Use cases: training videos, product walk-throughs, children's stories, conference talks.",
+  "author": {
+    "name": "Matt Jiang",
+    "email": "matt.jiang@gmail.com",
+    "url": "https://iqtechnology.ai"
+  },
+  "homepage": "https://github.com/iqtechnology/narrated-deck",
+  "license": "Proprietary",
+  "keywords": [
+    "tts",
+    "narration",
+    "training",
+    "html-presentation",
+    "voai",
+    "elevenlabs",
+    "ppt-to-video",
+    "explainer"
+  ]
+}

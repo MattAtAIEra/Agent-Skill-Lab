@@ -1,0 +1,13 @@
+{
+  "name": "notebooklm-cleaner",
+  "description": "Remove the NotebookLM watermark from PDFs exported by Google NotebookLM.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Matt / IQ Technology Inc."
+  },
+  "keywords": [
+    "pdf",
+    "notebooklm",
+    "watermark"
+  ]
+}

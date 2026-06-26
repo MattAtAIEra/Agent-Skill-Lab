@@ -1,0 +1,16 @@
+/* Theme: government — serious, official, calm authority */
+/* Mirrors the Kaohsiung Health Bureau colorway. Use for public-sector training,
+   compliance refreshers, regulatory updates, public-health messaging. */
+
+:root {
+  --primary: #2C5F2D;     /* deep evergreen — gov authority */
+  --secondary: #97BC62;   /* sage — supporting */
+  --accent: #C7392F;      /* alert red — violations / risk */
+  --warn: #E8A93C;        /* amber — caution / highlight */
+  --cream: #F5F4EC;       /* paper */
+  --ink: #1A2E1B;         /* deep ink */
+  --dim: #6B7770;         /* dim text */
+  --white: #ffffff;
+  --display-font: "Microsoft JhengHei", "PingFang TC", "Noto Sans CJK TC",
+                  "Source Han Sans TC", "Apple LiGothic", sans-serif;
+}

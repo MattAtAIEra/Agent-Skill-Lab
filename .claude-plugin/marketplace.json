@@ -23,6 +23,30 @@
       "description": "Definitive guide for authoring Claude Code plugin skills and agents with correct YAML frontmatter, file structure, and common mistake prevention",
       "source": "./plugins/skill-and-agent-authoring",
       "category": "development"
+    },
+    {
+      "name": "deploy-preflight",
+      "description": "Production deploy preflight check: diagnose target host resources and integrate safeguards into deployment scripts",
+      "source": "./plugins/deploy-preflight",
+      "category": "development"
+    },
+    {
+      "name": "notebooklm-cleaner",
+      "description": "Remove NotebookLM watermark from exported PDFs",
+      "source": "./plugins/notebooklm-cleaner",
+      "category": "productivity"
+    },
+    {
+      "name": "narrated-deck",
+      "description": "Turn a PPT, PDF, or outline into a self-contained narrated HTML page with per-subtitle TTS audio, scene-based visual transitions, and a built-in player",
+      "source": "./plugins/narrated-deck",
+      "category": "productivity"
+    },
+    {
+      "name": "research-discipline",
+      "description": "Research discipline for government-commissioned studies: technical-staff stance and tone, avoiding overstepping into legislative or regulatory roles",
+      "source": "./plugins/research-discipline",
+      "category": "research"
     }
   ]
 }

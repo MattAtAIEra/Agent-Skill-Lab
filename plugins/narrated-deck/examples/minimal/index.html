@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<title>小狐狸找月亮 ‧ 一個睡前故事</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+/* ── Theme tokens (overridden by themes/{theme}.css below) ──────── */
+:root {
+  --primary: #2C5F2D;
+  --secondary: #97BC62;
+  --accent: #C7392F;
+  --warn: #E8A93C;
+  --cream: #F5F4EC;
+  --ink: #1A2E1B;
+  --dim: #6B7770;
+  --white: #ffffff;
+  --display-font: "Microsoft JhengHei", "PingFang TC", "Noto Sans CJK TC", "Source Han Sans TC", sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  width: 100%; height: 100%; overflow: hidden;
+  font-family: var(--display-font);
+  background: #000; color: var(--ink);
+}
+#stage {
+  position: relative; width: 100vw; height: 100vh;
+  background: var(--cream); overflow: hidden;
+  display: flex; flex-direction: column;
+}
+
+/* ── Top bar ───────────────────────────────────── */
+.topbar {
+  height: 40px; background: var(--primary); color: white;
+  display: flex; align-items: center; padding: 0 24px;
+  font-size: 13px; gap: 16px; flex-shrink: 0;
+}
+.crumb { opacity: 0.9; font-weight: 600; letter-spacing: 1px; }
+.progress { flex: 1; height: 4px; background: rgba(255,255,255,0.18); border-radius: 2px; position: relative; }
+.progress-bar { position: absolute; top: 0; left: 0; bottom: 0; width: 0%; background: var(--warn); border-radius: 2px; transition: width 0.15s; }
+.time { font-variant-numeric: tabular-nums; opacity: 0.85; }
+
+/* ── Stage frame ────────────────────────────────── */
+.frame { position: relative; flex: 1; overflow: hidden; background: var(--cream); }
+
+/* ── Generic scene ──────────────────────────────── */
+.scene {
+  position: absolute; inset: 0; padding: 48px 64px 200px;
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+  pointer-events: none; display: flex; flex-direction: column;
+}
+.scene.active { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.eyebrow { font-size: 13px; letter-spacing: 4px; color: var(--primary); font-weight: 700; text-transform: uppercase; margin-bottom: 10px; }
+.h1 { font-size: 42px; font-weight: 800; color: var(--ink); margin-bottom: 28px; line-height: 1.2; }
+.h2 { font-size: 28px; font-weight: 700; color: var(--ink); margin-bottom: 14px; }
+.lead { font-size: 18px; color: var(--dim); line-height: 1.6; }
+
+/* ── Scene: title / outro shared ──────────────────── */
+.scene-title, .scene-outro {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--ink) 100%);
+  padding: 64px 80px 200px;
+  color: white;
+  justify-content: center;
+}
+.scene-title .eyebrow, .scene-outro .eyebrow { color: var(--secondary); }
+.scene-title .display, .scene-outro .display { font-size: 88px; font-weight: 800; line-height: 1.05; color: white; margin: 24px 0; }
+.scene-title .display .accent, .scene-outro .display .accent { color: var(--warn); }
+.scene-title .tagline, .scene-outro .tagline { font-size: 22px; color: var(--cream); margin-top: 24px; opacity: 0.9; }
+.scene-title .ribbon { width: 80px; height: 6px; background: var(--warn); margin: 32px 0 16px; border-radius: 3px; }
+.scene-title .series, .scene-outro .next { font-size: 14px; color: var(--cream); opacity: 0.7; letter-spacing: 2px; }
+.scene-title .blob, .scene-outro .blob { position: absolute; border-radius: 50%; pointer-events: none; }
+.scene-title .blob.b1 { right: -200px; top: -200px; width: 600px; height: 600px; background: var(--secondary); opacity: 0.25; }
+.scene-title .blob.b2 { right: 200px; bottom: -100px; width: 320px; height: 320px; background: var(--warn); opacity: 0.18; }
+.scene-outro .blob.b1 { left: -150px; top: -150px; width: 500px; height: 500px; background: var(--secondary); opacity: 0.2; }
+.scene-outro .blob.b2 { right: -100px; bottom: -200px; width: 480px; height: 480px; background: var(--warn); opacity: 0.15; }
+
+/* ── Scene: 2-column painpoint ────────────────────── */
+.painpoint { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 12px; }
+.panel { background: white; border-radius: 12px; padding: 28px; box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
+.panel.dark { background: var(--primary); color: white; box-shadow: 0 8px 24px rgba(0,0,0,0.18); }
+.panel h3 { font-size: 22px; margin-bottom: 16px; }
+.panel.dark h3 { color: var(--warn); }
+.panel ul { list-style: none; padding: 0; margin: 0 0 16px; }
+.panel li { padding: 8px 0; font-size: 16px; line-height: 1.5; }
+.panel li::before { content: "‧ "; color: var(--secondary); font-weight: bold; }
+.panel.dark li::before { color: var(--warn); }
+.panel .stat { font-size: 14px; color: var(--dim); margin-top: 16px; }
+.panel.dark .stat { color: rgba(255,255,255,0.7); }
+.panel .stat .num { font-size: 32px; font-weight: 800; color: var(--accent); margin-left: 8px; vertical-align: middle; }
+.panel.dark .stat .num { color: var(--warn); }
+
+/* ── Scene: 3-card row (objectives / takeaways / etc.) ──────────── */
+.cards-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; margin-top: 24px; }
+.cards-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 24px; }
+.card { background: white; border-radius: 12px; padding: 28px; display: flex; gap: 20px; align-items: flex-start; box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
+.card-num { width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 30px; font-weight: 800; flex-shrink: 0; }
+.card-num.c1 { background: var(--primary); }
+.card-num.c2 { background: var(--secondary); }
+.card-num.c3 { background: var(--accent); }
+.card-num.c4 { background: var(--warn); color: var(--ink); }
+.card-title { font-size: 18px; font-weight: 700; color: var(--ink); margin-bottom: 8px; }
+.card-body { font-size: 14px; color: var(--dim); line-height: 1.5; }
+.tagline-center { margin-top: 36px; text-align: center; font-style: italic; color: var(--primary); font-size: 22px; font-weight: 700; }
+
+/* ── Scene: callout stack (FAQ / answers / 3-color signal) ────── */
+.callout-stack { display: flex; flex-direction: column; gap: 14px; margin-top: 18px; }
+.callout { background: white; border-radius: 10px; padding: 18px 22px; display: flex; gap: 16px; align-items: flex-start; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+.callout-icon { width: 44px; height: 44px; border-radius: 50%; color: white; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 18px; }
+.cl-p { background: var(--primary); }
+.cl-s { background: var(--secondary); }
+.cl-a { background: var(--accent); }
+.cl-w { background: var(--warn); color: var(--ink); }
+.cl-blue { background: #3b82c4; }
+.callout-title { font-size: 17px; font-weight: 700; color: var(--ink); }
+.callout-desc { font-size: 14px; color: var(--dim); line-height: 1.55; margin-top: 4px; }
+
+/* ── Scene: browser-style demo ──────────────────── */
+.browser { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.12); margin-top: 18px; }
+.browser-bar { background: var(--ink); padding: 8px 12px; display: flex; align-items: center; gap: 6px; }
+.dot { width: 10px; height: 10px; border-radius: 50%; }
+.dot.r { background: var(--accent); } .dot.y { background: var(--warn); } .dot.g { background: var(--secondary); }
+.browser-url { color: var(--cream); font-size: 11px; margin-left: 12px; opacity: 0.8; }
+.browser-body { padding: 24px; min-height: 280px; }
+.browser-body h4 { font-size: 18px; color: var(--primary); margin-bottom: 12px; }
+
+/* ── Subtitle bar ───────────────────────────────── */
+.subtitle-bar {
+  position: absolute; left: 64px; right: 64px; bottom: 88px;
+  background: rgba(26, 46, 27, 0.94); color: white;
+  padding: 18px 28px; border-radius: 10px;
+  font-size: 22px; line-height: 1.5;
+  min-height: 70px; display: flex; align-items: center;
+  transition: opacity 0.3s;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+  z-index: 90;
+}
+.subtitle-bar.empty { opacity: 0; }
+.subtitle-bar .marker { color: var(--warn); margin-right: 12px; flex-shrink: 0; font-weight: bold; }
+
+/* ── Controls bar ───────────────────────────────── */
+.controls {
+  height: 64px; background: var(--ink);
+  display: flex; align-items: center; padding: 0 24px; gap: 12px;
+  flex-shrink: 0; border-top: 2px solid var(--primary);
+}
+.btn { background: var(--primary); color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; font-size: 14px; font-family: inherit; transition: background 0.2s; font-weight: 600; }
+.btn:hover { background: var(--secondary); color: var(--ink); }
+.btn.warn { background: var(--warn); color: var(--ink); }
+.btn.warn:hover { background: white; }
+.btn.ghost { background: transparent; border: 1px solid rgba(255,255,255,0.3); }
+.btn.ghost:hover { background: rgba(255,255,255,0.1); color: white; }
+.timeinfo { color: white; font-size: 14px; font-variant-numeric: tabular-nums; }
+.scene-chip { color: rgba(255,255,255,0.65); font-size: 13px; margin-left: auto; }
+.no-audio-note { color: var(--warn); font-size: 12px; padding: 6px 12px; background: rgba(232,169,60,0.15); border-radius: 4px; }
+audio { display: none; }
+
+/* small screen */
+@media (max-width: 900px) {
+  .scene { padding: 32px 24px 120px; }
+  .h1 { font-size: 28px; }
+  .painpoint, .cards-3, .cards-2 { grid-template-columns: 1fr; }
+  .scene-title .display, .scene-outro .display { font-size: 44px; }
+  .subtitle-bar { left: 16px; right: 16px; font-size: 16px; }
+}
+
+/* /* Theme: children — playful, warm, big-fonted */
+/* For bedtime stories, picture books, kids' educational content, sing-alongs.
+   Wider line-height + larger subtitles so young readers can follow along. */
+
+:root {
+  --primary: #FF6B9D;     /* warm pink */
+  --secondary: #FFD93D;   /* sunny yellow */
+  --accent: #4ECDC4;      /* mint teal */
+  --warn: #FFA45B;        /* orange */
+  --cream: #FFF8E7;       /* eggshell */
+  --ink: #5D3A00;         /* warm brown ink */
+  --dim: #A47148;         /* soft brown */
+  --white: #ffffff;
+  --display-font: "Comic Sans MS", "Chalkboard SE", "Microsoft JhengHei",
+                  "PingFang TC", sans-serif;
+}
+
+/* Bigger subtitles for young readers */
+.subtitle-bar {
+  font-size: 30px !important;
+  background: rgba(93, 58, 0, 0.92) !important;
+  border: 3px solid var(--warn) !important;
+}
+.subtitle-bar .marker { color: var(--secondary) !important; }
+
+/* Rounder everything */
+.card, .panel, .callout, .browser, .btn { border-radius: 24px !important; }
+
+/* Display fonts bigger */
+.scene-title .display, .scene-outro .display { font-size: 110px !important; }
+.h1 { font-size: 56px !important; }
+.h2 { font-size: 36px !important; }
+ */
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- Top brand bar -->
+  <div class="topbar">
+    <div class="crumb">narrated-deck demo ‧ 一個睡前故事</div>
+    <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+    <div class="time" id="topTime">0:00 / 0:00</div>
+  </div>
+
+  <!-- Scene stage -->
+  <div class="frame" id="frame">
+
+    <div class="scene scene-title" data-id="s01">
+      <span class="blob b1"></span><span class="blob b2"></span>
+      <div class="eyebrow">BEDTIME STORY</div>
+      <div class="display">小狐狸 <span class='accent'>找月亮</span></div>
+      <div class="ribbon"></div>
+      <div class="tagline">一個關於好奇心的睡前故事</div>
+      <div class="series">narrated-deck ‧ 兒童示範</div>
+    </div>
+
+    <div class="scene" data-id="s02">
+      <div class="eyebrow">第一幕</div>
+      <div class="h1">森林裡的小米</div>
+      <div class="lead">牠是一隻好奇心很重的小狐狸，喜歡晚上出來探險。</div>
+      
+    </div>
+
+    <div class="scene" data-id="s03">
+      <div class="eyebrow">第二幕</div>
+      <div class="h1">那是什麼？</div>
+      <div class="lead">天上有個圓圓亮亮的東西，小米沒看過。</div>
+      
+    </div>
+
+    <div class="scene" data-id="s04">
+      <div class="eyebrow">第三幕</div>
+      <div class="h1">媽媽告訴小米</div>
+      <div class="cards-2">
+        <div class="card">
+          <div class="card-num c1">🌙</div>
+          <div>
+            <div class="card-title">那是月亮</div>
+            <div class="card-body">天上的明亮夥伴</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-num c2">💤</div>
+          <div>
+            <div class="card-title">陪大家睡覺</div>
+            <div class="card-body">每天晚上都會出現</div>
+          </div>
+        </div></div>
+      
+    </div>
+
+    <div class="scene" data-id="s05">
+      <div class="eyebrow">第四幕</div>
+      <div class="h1">原來如此</div>
+      <div class="lead">月亮一直都在天上，看著小米和所有小朋友。</div>
+      
+    </div>
+
+    <div class="scene scene-outro" data-id="s06">
+      <span class="blob b1"></span><span class="blob b2"></span>
+      <div class="display">晚安，<span class='accent'>小米</span><br>晚安，月亮</div>
+      <div class="next">故事說完了，該睡覺囉。</div>
+    </div>
+  </div><!-- /.frame -->
+
+  <!-- Subtitle overlay -->
+  <div class="subtitle-bar empty" id="subtitleBar"></div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <button class="btn warn" id="playBtn">▶ 播放</button>
+    <button class="btn ghost" id="prevBtn">⏮ 上一段</button>
+    <button class="btn ghost" id="nextBtn">⏭ 下一段</button>
+    <button class="btn ghost" id="restartBtn">⟲ 重播</button>
+    <div class="timeinfo" id="timeinfo">0:00 / 0:00</div>
+    <div class="no-audio-note" id="audioNote" style="display:none">部分配音檔尚未產生（將以預估秒數播放靜音）</div>
+    <div class="scene-chip" id="sceneChip">場景 1</div>
+    <audio id="player" preload="auto"></audio>
+  </div>
+
+</div>
+
+<script>
+// ────────────────────────────────────────────────
+//  Subs (injected from {prefix}.subs.json)
+// ────────────────────────────────────────────────
+const PREFIX = "BEDTIME";
+const AUDIO_DIR = "audio";
+const SUBS = [
+  {
+    "id": "001",
+    "scene": "s01",
+    "text": "",
+    "dur": 3
+  },
+  {
+    "id": "002",
+    "scene": "s02",
+    "text": "從前從前，森林裡住著一隻小狐狸。"
+  },
+  {
+    "id": "003",
+    "scene": "s02",
+    "text": "牠的名字叫做小米。"
+  },
+  {
+    "id": "004",
+    "scene": "s03",
+    "text": "有一天晚上，小米抬頭看見天上有一個圓圓的、亮亮的東西。"
+  },
+  {
+    "id": "005",
+    "scene": "s03",
+    "text": "「那是什麼呀？」小米好奇地問。"
+  },
+  {
+    "id": "006",
+    "scene": "s04",
+    "text": "媽媽輕輕地說：「那是月亮。」"
+  },
+  {
+    "id": "007",
+    "scene": "s04",
+    "text": "「月亮每天晚上都會出來，陪著大家睡覺。」"
+  },
+  {
+    "id": "008",
+    "scene": "s05",
+    "text": "小米開心地笑了。"
+  },
+  {
+    "id": "009",
+    "scene": "s05",
+    "text": "原來，月亮一直都在天上看著我們。"
+  },
+  {
+    "id": "010",
+    "scene": "s06",
+    "text": "晚安，小米。晚安，月亮。"
+  },
+  {
+    "id": "011",
+    "scene": "s06",
+    "text": "",
+    "dur": 5
+  }
+];
+
+// scene id → human label (injected from scenes.json)
+const SCENE_LABELS = {"s01": "開場", "s02": "介紹小狐狸", "s03": "發現月亮", "s04": "媽媽說明", "s05": "小米明白了", "s06": "晚安"};
+
+// ────────────────────────────────────────────────
+//  Player core (do not touch — proven on Kaohsiung pilot)
+// ────────────────────────────────────────────────
+function estDur(s) {
+  if (s.dur) return s.dur;
+  if (!s.text) return 1.5;
+  // ~4 Chinese chars/sec; ~2.5 English words/sec
+  const isAscii = /^[\x00-\x7f\s\p{P}]*$/u.test(s.text);
+  return Math.max(1.8, isAscii ? s.text.split(/\s+/).length / 2.5 : s.text.length / 4);
+}
+function sceneLabel(sid) { return SCENE_LABELS[sid] || sid; }
+const TOTAL_EST = SUBS.reduce((a, s) => a + estDur(s), 0);
+
+const player = document.getElementById('player');
+const sceneEls = Array.from(document.querySelectorAll('.scene'));
+const subtitleBar = document.getElementById('subtitleBar');
+const progressBar = document.getElementById('progressBar');
+const topTime = document.getElementById('topTime');
+const timeinfo = document.getElementById('timeinfo');
+const sceneChip = document.getElementById('sceneChip');
+const audioNote = document.getElementById('audioNote');
+const playBtn = document.getElementById('playBtn');
+
+let curIdx = 0;
+let isPlaying = false;
+let virtualTimer = null;
+let elapsedBefore = 0;
+const actualDur = {};
+
+function fmt(t) {
+  const m = Math.floor(t / 60);
+  const s = Math.floor(t % 60);
+  return `${m}:${s.toString().padStart(2,'0')}`;
+}
+function durOf(s) { return actualDur[s.id] || estDur(s); }
+function recalcElapsedBefore(idx) {
+  let t = 0;
+  for (let i = 0; i < idx; i++) t += durOf(SUBS[i]);
+  elapsedBefore = t;
+}
+function audioUrl(s) { return `${AUDIO_DIR}/${PREFIX}-${s.id}.mp3`; }
+function showScene(sid) {
+  sceneEls.forEach(el => el.classList.toggle('active', el.getAttribute('data-id') === sid));
+}
+function showSub(s) {
+  if (s.text && s.text.trim()) {
+    subtitleBar.innerHTML = `<span class="marker">▸</span>${s.text}`;
+    subtitleBar.classList.remove('empty');
+  } else {
+    subtitleBar.classList.add('empty');
+  }
+}
+function updateChrome(curT) {
+  const total = Math.max(TOTAL_EST, curT);
+  const pct = Math.min(100, curT / total * 100);
+  progressBar.style.width = pct + '%';
+  topTime.textContent = `${fmt(curT)} / ${fmt(total)}`;
+  timeinfo.textContent = `${fmt(curT)} / ${fmt(total)}`;
+  sceneChip.textContent = `${curIdx+1} / ${SUBS.length} ‧ ${sceneLabel(SUBS[curIdx].scene)}`;
+}
+function render(curIntra=0) {
+  const s = SUBS[curIdx];
+  showScene(s.scene);
+  showSub(s);
+  updateChrome(elapsedBefore + curIntra);
+}
+function clearTimers() {
+  if (virtualTimer) { clearTimeout(virtualTimer); virtualTimer = null; }
+}
+function advance() {
+  const s = SUBS[curIdx];
+  if (player.duration && !isNaN(player.duration) && player.duration > 0.1) {
+    actualDur[s.id] = player.duration;
+  }
+  clearTimers();
+  if (curIdx + 1 < SUBS.length) {
+    curIdx++;
+    elapsedBefore += durOf(s);
+    render(0);
+    if (isPlaying) playCurrent();
+  } else {
+    stop();
+  }
+}
+
+const preloader = new Audio();
+preloader.preload = 'auto';
+function preloadNext() {
+  for (let j = curIdx + 1; j < SUBS.length; j++) {
+    if (SUBS[j].text && SUBS[j].text.trim()) {
+      preloader.src = audioUrl(SUBS[j]);
+      preloader.load();
+      return;
+    }
+  }
+}
+
+function playCurrent() {
+  const s = SUBS[curIdx];
+  clearTimers();
+  if (s.text && s.text.trim()) {
+    player.src = audioUrl(s);
+    player.load();
+    const promise = player.play();
+    if (promise && promise.catch) promise.catch(err => {
+      console.warn('audio play failed:', err);
+      virtualTimer = setTimeout(advance, estDur(s) * 1000);
+    });
+    audioNote.style.display = 'none';
+    preloadNext();
+  } else {
+    virtualTimer = setTimeout(advance, estDur(s) * 1000);
+    preloadNext();
+  }
+}
+function play() { isPlaying = true; playBtn.textContent = '⏸ 暫停'; playCurrent(); }
+function pause() { isPlaying = false; playBtn.textContent = '▶ 播放'; clearTimers(); player.pause(); }
+function stop() { pause(); curIdx = 0; elapsedBefore = 0; render(0); }
+function goTo(idx, autoplay = isPlaying) {
+  clearTimers();
+  player.pause();
+  curIdx = Math.max(0, Math.min(SUBS.length - 1, idx));
+  recalcElapsedBefore(curIdx);
+  render(0);
+  if (autoplay) playCurrent();
+}
+function gotoScene(direction) {
+  const curScene = SUBS[curIdx].scene;
+  if (direction === 'next') {
+    let i = curIdx;
+    while (i < SUBS.length && SUBS[i].scene === curScene) i++;
+    if (i >= SUBS.length) i = curIdx;
+    goTo(i);
+  } else {
+    let i = curIdx;
+    while (i > 0 && SUBS[i-1].scene === curScene) i--;
+    if (i === curIdx && i > 0) {
+      const prevScene = SUBS[i-1].scene;
+      i--;
+      while (i > 0 && SUBS[i-1].scene === prevScene) i--;
+    }
+    goTo(i);
+  }
+}
+
+player.addEventListener('ended', advance);
+player.addEventListener('error', e => {
+  console.warn('audio error for', SUBS[curIdx].id, e);
+  if (isPlaying) {
+    clearTimers();
+    virtualTimer = setTimeout(advance, estDur(SUBS[curIdx]) * 1000);
+  }
+  audioNote.style.display = '';
+});
+player.addEventListener('timeupdate', () => {
+  if (isPlaying) render(player.currentTime || 0);
+});
+
+playBtn.addEventListener('click', () => isPlaying ? pause() : play());
+document.getElementById('restartBtn').addEventListener('click', stop);
+document.getElementById('prevBtn').addEventListener('click', () => gotoScene('prev'));
+document.getElementById('nextBtn').addEventListener('click', () => gotoScene('next'));
+
+document.addEventListener('keydown', e => {
+  if (e.code === 'Space') { e.preventDefault(); playBtn.click(); }
+  if (e.code === 'ArrowLeft') gotoScene('prev');
+  if (e.code === 'ArrowRight') gotoScene('next');
+});
+
+render(0);
+</script>
+</body>
+</html>

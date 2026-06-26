@@ -1,0 +1,32 @@
+/* Theme: children — playful, warm, big-fonted */
+/* For bedtime stories, picture books, kids' educational content, sing-alongs.
+   Wider line-height + larger subtitles so young readers can follow along. */
+
+:root {
+  --primary: #FF6B9D;     /* warm pink */
+  --secondary: #FFD93D;   /* sunny yellow */
+  --accent: #4ECDC4;      /* mint teal */
+  --warn: #FFA45B;        /* orange */
+  --cream: #FFF8E7;       /* eggshell */
+  --ink: #5D3A00;         /* warm brown ink */
+  --dim: #A47148;         /* soft brown */
+  --white: #ffffff;
+  --display-font: "Comic Sans MS", "Chalkboard SE", "Microsoft JhengHei",
+                  "PingFang TC", sans-serif;
+}
+
+/* Bigger subtitles for young readers */
+.subtitle-bar {
+  font-size: 30px !important;
+  background: rgba(93, 58, 0, 0.92) !important;
+  border: 3px solid var(--warn) !important;
+}
+.subtitle-bar .marker { color: var(--secondary) !important; }
+
+/* Rounder everything */
+.card, .panel, .callout, .browser, .btn { border-radius: 24px !important; }
+
+/* Display fonts bigger */
+.scene-title .display, .scene-outro .display { font-size: 110px !important; }
+.h1 { font-size: 56px !important; }
+.h2 { font-size: 36px !important; }

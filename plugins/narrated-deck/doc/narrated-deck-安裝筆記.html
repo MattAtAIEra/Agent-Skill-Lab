@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<title>narrated-deck ‧ 安裝筆記</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --primary: #2C5F2D;
+  --secondary: #97BC62;
+  --accent: #C7392F;
+  --warn: #E8A93C;
+  --cream: #F8F7EF;
+  --ink: #1A2E1B;
+  --dim: #6B7770;
+  --code-bg: #1E2F1E;
+  --code-fg: #E0F0E0;
+  --border: #d8d8d0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: "PingFang TC", "Microsoft JhengHei", "Noto Sans CJK TC", -apple-system, sans-serif;
+  color: var(--ink);
+  background: var(--cream);
+  line-height: 1.7;
+  font-size: 16px;
+}
+.wrap { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+
+/* hero */
+.hero {
+  background: linear-gradient(135deg, var(--primary) 0%, #1f4421 100%);
+  color: white;
+  padding: 56px 0 48px;
+  margin-bottom: 40px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before, .hero::after {
+  content: ""; position: absolute; border-radius: 50%; pointer-events: none;
+}
+.hero::before { right: -150px; top: -150px; width: 400px; height: 400px; background: var(--secondary); opacity: 0.22; }
+.hero::after  { left: -100px; bottom: -150px; width: 320px; height: 320px; background: var(--warn); opacity: 0.18; }
+.hero .wrap { position: relative; z-index: 2; }
+.eyebrow { font-size: 12px; letter-spacing: 4px; color: var(--warn); font-weight: 700; text-transform: uppercase; margin-bottom: 12px; }
+h1 { font-size: 44px; font-weight: 800; line-height: 1.15; margin-bottom: 14px; }
+.tagline { font-size: 17px; color: var(--cream); opacity: 0.92; max-width: 640px; }
+.meta { margin-top: 24px; font-size: 13px; color: var(--cream); opacity: 0.75; letter-spacing: 1px; }
+
+/* sections */
+section { margin-bottom: 56px; }
+h2 {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--primary);
+  margin-bottom: 18px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--border);
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+h2 .num {
+  display: inline-block;
+  background: var(--primary);
+  color: white;
+  font-size: 14px;
+  padding: 3px 10px;
+  border-radius: 4px;
+  letter-spacing: 1px;
+}
+h3 { font-size: 19px; font-weight: 700; color: var(--ink); margin: 26px 0 10px; }
+p { margin-bottom: 14px; }
+ul, ol { margin: 0 0 16px 22px; }
+li { margin-bottom: 8px; }
+
+/* code */
+code {
+  background: rgba(44,95,45,0.08);
+  color: var(--primary);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: "SF Mono", "Menlo", "Consolas", monospace;
+  font-size: 0.9em;
+}
+pre {
+  background: var(--code-bg);
+  color: var(--code-fg);
+  padding: 18px 22px;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 14px 0;
+  font-family: "SF Mono", "Menlo", "Consolas", monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  position: relative;
+}
+pre code { background: none; color: inherit; padding: 0; font-size: inherit; }
+pre .cmt { color: #8aaa8a; font-style: italic; }
+
+/* table */
+.tbl-wrap { overflow-x: auto; margin: 14px 0; }
+table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+th { background: var(--primary); color: white; font-weight: 700; font-size: 14px; letter-spacing: 0.5px; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: var(--cream); }
+
+/* call-out boxes */
+.box {
+  padding: 16px 20px;
+  border-radius: 8px;
+  margin: 16px 0;
+  border-left: 4px solid;
+  background: white;
+}
+.box.tip    { border-color: var(--secondary); background: #f5fae8; }
+.box.warn   { border-color: var(--warn);      background: #FFF7E8; }
+.box.danger { border-color: var(--accent);    background: #FBF1F0; }
+.box.note   { border-color: var(--primary);   background: #f0f5f0; }
+.box-title { font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+.box-title .icon { font-size: 18px; }
+.box.tip .icon    { color: var(--secondary); }
+.box.warn .icon   { color: var(--warn); }
+.box.danger .icon { color: var(--accent); }
+.box.note .icon   { color: var(--primary); }
+
+/* TOC */
+.toc {
+  background: white;
+  border-radius: 10px;
+  padding: 20px 26px;
+  margin-bottom: 40px;
+  border: 1px solid var(--border);
+}
+.toc-title { font-size: 13px; letter-spacing: 3px; color: var(--primary); font-weight: 700; text-transform: uppercase; margin-bottom: 12px; }
+.toc ol { margin-left: 18px; }
+.toc a { color: var(--ink); text-decoration: none; font-weight: 500; }
+.toc a:hover { color: var(--primary); text-decoration: underline; }
+
+/* dl / definition list */
+dl { background: white; border-radius: 8px; padding: 18px 22px; margin: 16px 0; border: 1px solid var(--border); }
+dt { font-weight: 700; color: var(--primary); margin-top: 12px; }
+dt:first-child { margin-top: 0; }
+dd { margin-left: 0; margin-top: 4px; margin-bottom: 6px; color: var(--ink); }
+
+/* footer */
+.footer {
+  margin-top: 48px;
+  padding: 30px 0;
+  border-top: 2px solid var(--border);
+  font-size: 13px;
+  color: var(--dim);
+  text-align: center;
+}
+.footer strong { color: var(--ink); }
+
+/* small */
+strong { font-weight: 700; }
+em { font-style: italic; color: var(--primary); }
+
+@media (max-width: 640px) {
+  h1 { font-size: 32px; }
+  h2 { font-size: 22px; }
+  .hero { padding: 36px 0 32px; }
+  pre { font-size: 12px; padding: 14px 16px; }
+}
+
+@media print {
+  body { background: white; }
+  .hero { background: var(--primary) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  pre { background: #f0f0f0; color: #1a1a1a; border: 1px solid #ccc; }
+  .toc, .box, table { box-shadow: none; }
+  a { color: var(--ink); text-decoration: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">IQT INTERNAL ‧ INSTALLATION NOTE</div>
+    <h1>narrated-deck<br>安裝與使用筆記</h1>
+    <div class="tagline">把 PPT / PDF / 大綱，變成自包含的 narrated HTML 動態頁面 — Voai/ElevenLabs 配音、場景動畫、字幕、自帶播放器。</div>
+    <div class="meta">v0.1.0 ‧ 2026-06-05 ‧ Matt Jiang &lt;matt.jiang@iqtechnology.ai&gt;</div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<nav class="toc">
+  <div class="toc-title">目錄</div>
+  <ol>
+    <li><a href="#what">這是什麼？什麼時候用？</a></li>
+    <li><a href="#install">三種安裝方式</a></li>
+    <li><a href="#keys">API Keys 設定（Voai / ElevenLabs）</a></li>
+    <li><a href="#use">怎麼觸發、怎麼用</a></li>
+    <li><a href="#quickstart">Quick start：跑一遍 example</a></li>
+    <li><a href="#troubleshoot">疑難排解</a></li>
+    <li><a href="#license">授權說明</a></li>
+  </ol>
+</nav>
+
+<!-- ─────────────────────────────────────────────────── -->
+<section id="what">
+<h2><span class="num">1</span>這是什麼？</h2>
+
+<p><strong>narrated-deck</strong> 是一個 Claude plugin / skill。給它一份 PPT、PDF、或寫好的大綱，它會交付一個資料夾：</p>
+
+<pre><code>my-project/
+├── index.html        ← 自包含播放器（CSS/JS inline，無 CDN 依賴）
+├── subs.json         ← single source of truth：scenes + 字幕
+├── scenes.json       ← 視覺內容（每場景型別 + props）
+└── audio/
+    ├── PROJ-001.mp3  ← 一段字幕 = 一個 mp3
+    ├── PROJ-002.mp3
+    └── ...
+</code></pre>
+
+<p>瀏覽器打開 index.html 就播。可以掛靜態主機、可以螢幕錄製成 mp4、可以放 USB 給人離線看。</p>
+
+<h3>什麼時候用</h3>
+<ul>
+  <li><strong>政府／企業培訓影片</strong>（衛生局 A1/B1 就是用這條管線出的）</li>
+  <li><strong>產品 demo / SaaS 解說</strong></li>
+  <li><strong>兒童故事 / 繪本</strong></li>
+  <li><strong>合規／法規更新通知</strong></li>
+  <li><strong>onboarding / 新人培訓</strong></li>
+</ul>
+
+<h3>什麼時候不要用</h3>
+<ul>
+  <li>要做給人現場「翻投影片」用 → 用 <code>pptx</code> skill</li>
+  <li>要做書面報告 / Word 文件 → 用 <code>docx</code> skill</li>
+  <li>要做純 audiobook（沒視覺）→ 直接用 <code>tts_voai.py</code> 腳本就好，不用整套</li>
+</ul>
+</section>
+
+<!-- ─────────────────────────────────────────────────── -->
+<section id="install">
+<h2><span class="num">2</span>三種安裝方式</h2>
+
+<p>選一個適合您角色的：</p>
+
+<h3>A. 開發模式 — 直接連 source（推薦給 Matt 自己用）</h3>
+<p>plugin source 在：</p>
+<pre><code>/Users/matt/labs/agent-skill-lab/narrated-deck/</code></pre>
+<p>讓 Claude Code 設定中加這條 plugin path（具體欄位看 Claude Code 版本，可能是 <code>~/.claude/settings.json</code> 的 <code>plugins.sources</code>）：</p>
+<pre><code>{
+  "plugins": {
+    "sources": [
+      "/Users/matt/labs/agent-skill-lab/narrated-deck"
+    ]
+  }
+}</code></pre>
+<div class="box tip">
+  <div class="box-title"><span class="icon">✓</span> 為什麼推薦這個</div>
+  <div>您改 SKILL.md / scripts 即時生效，免重打包。比 .plugin 安裝多一層便利。</div>
+</div>
+
+<h3>B. .plugin 安裝 — 給 IQT 同仁、給客戶</h3>
+<p>把 <code>narrated-deck-v0.1.0.plugin</code> 檔（60KB、zip 格式）給對方。對方：</p>
+<ol>
+  <li>在 Cowork 介面：拖進去或雙擊 → 自動裝</li>
+  <li>或命令列：<code>unzip narrated-deck-v0.1.0.plugin -d ~/.claude/plugins/narrated-deck</code></li>
+  <li>重啟 Claude Code / Cowork</li>
+</ol>
+
+<h3>C. 手動 git clone（給有 git workflow 的人）</h3>
+<p>未來推上 GitHub 後：</p>
+<pre><code>git clone https://github.com/iqtechnology/narrated-deck ~/.claude/plugins/narrated-deck</code></pre>
+
+<div class="box note">
+  <div class="box-title"><span class="icon">ⓘ</span> 包裝為 .plugin 的意義</div>
+  <div><code>.plugin</code> 是 zip 改副檔名，純粹「為了分享」的格式。對作者本人意義不大，對接收者意義大 — 一個檔解決，不用懂結構。</div>
+</div>
+</section>
+
+<!-- ─────────────────────────────────────────────────── -->
+<section id="keys">
+<h2><span class="num">3</span>API Keys 設定</h2>
+
+<p>plugin 內 <strong>沒有任何 API key 寫死</strong>（這是刻意的 — 寫死就會跟著 .plugin 漏出去）。所有 TTS 腳本都讀環境變數：</p>
+
+<dl>
+  <dt>VOAI_API_KEY</dt>
+  <dd>Voai.ai 配音用（zh-TW 首選）。從 <a href="https://www.voai.ai" target="_blank">voai.ai</a> 取得。</dd>
+  <dt>ELEVENLABS_API_KEY</dt>
+  <dd>ElevenLabs 配音用（英語首選 / 多語備援）。從 <a href="https://elevenlabs.io" target="_blank">elevenlabs.io</a> 取得。</dd>
+</dl>
+
+<div class="box warn">
+  <div class="box-title"><span class="icon">⚠</span> 絕對不要做的事</div>
+  <ul style="margin-bottom: 0;">
+    <li>把 key 寫死在 .py 檔內，然後 commit 到 git</li>
+    <li>把 .env 檔 commit 到 git</li>
+    <li>把 key 直接放在共用對話 / chat 紀錄裡（這份筆記也有遮掉）</li>
+  </ul>
+</div>
+
+<h3>三種設定方法</h3>
+
+<h4>方法 A：當下 shell 用（測試）</h4>
+<pre><code><span class="cmt"># 開一個 terminal、暫時設 key</span>
+export VOAI_API_KEY='iq-xxxxxxxxxxxxxxxx'
+python3 tts_voai.py A1.subs.json --out audio/</code></pre>
+<p>關掉 terminal 就消失。適合一次性 / 測試。</p>
+
+<h4>方法 B：永久存在 shell rc（推薦給天天用的人）</h4>
+<p>編輯 <code>~/.zshrc</code>（macOS 預設）或 <code>~/.bashrc</code>，加：</p>
+<pre><code>export VOAI_API_KEY='iq-xxxxxxxxxxxxxxxx'
+export ELEVENLABS_API_KEY='sk_xxxxxxxxxxxxxxxx'</code></pre>
+<p>存檔後 <code>source ~/.zshrc</code> 或重開 terminal。從此每個新 shell 都自動有。</p>
+
+<h4>方法 C：專案 .env 檔（推薦給多 key、多專案的人）</h4>
+<p>每個專案目錄下放 <code>.env</code>：</p>
+<pre><code><span class="cmt"># .env 內容</span>
+VOAI_API_KEY=iq-xxxxxxxxxxxxxxxx
+ELEVENLABS_API_KEY=sk_xxxxxxxxxxxxxxxx</code></pre>
+<p>跑指令前把 .env 注入環境：</p>
+<pre><code>set -a; source .env; set +a
+python3 tts_voai.py A1.subs.json --out audio/</code></pre>
+
+<div class="box danger">
+  <div class="box-title"><span class="icon">⚠</span> .env 必加進 .gitignore！</div>
+  <pre style="margin: 8px 0 0; padding: 10px 14px;"><code>echo ".env" &gt;&gt; .gitignore</code></pre>
+</div>
+
+<h3>怎麼確認 key 有設好</h3>
+<pre><code><span class="cmt"># 看當前 shell 有沒有 VOAI_API_KEY</span>
+echo "VOAI: ${VOAI_API_KEY:+SET}${VOAI_API_KEY:-NOT_SET}"
+echo "ELL : ${ELEVENLABS_API_KEY:+SET}${ELEVENLABS_API_KEY:-NOT_SET}"</code></pre>
+
+<h3>沒有 key 的 fallback：HTML 也能跑</h3>
+<p>如果只想先看視覺、字幕配時，不想花 TTS 額度：直接跑 build_html.py 不跑 tts 腳本。HTML 內建虛擬時間軸，會按估計秒數推進場景、不出聲音。覺得結構 OK 了再補 TTS。</p>
+</section>
+
+<!-- ─────────────────────────────────────────────────── -->
+<section id="use">
+<h2><span class="num">4</span>怎麼觸發、怎麼用</h2>
+
+<p>裝好後，對 Claude 講話就行（不用記指令）：</p>
+
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>場景</th><th>範例 prompt</th></tr></thead>
+<tbody>
+<tr><td>政府培訓</td><td>「用 narrated-deck，做 A2 模組，主題：複雜案件處理流程」</td></tr>
+<tr><td>產品 demo</td><td>「用 narrated-deck，把這份產品 PPT 做成 8 分鐘 narrated explainer，product 主題」</td></tr>
+<tr><td>兒童故事</td><td>「用 narrated-deck，把這個故事做成兒童繪本動態頁，children 主題」</td></tr>
+<tr><td>多語</td><td>「narrated-deck，把 A1 翻成英文版，視覺保持不變」</td></tr>
+<tr><td>內部培訓</td><td>「用 narrated-deck，做新人入職第一週的合規介紹，corporate 主題」</td></tr>
+</tbody>
+</table>
+</div>
+
+<p>Claude 接到後會主動：</p>
+<ol>
+  <li>問 2–4 個 clarifying 問題（audience、tone、長度、語言、主題）</li>
+  <li>從您給的 PPT/PDF 抽取大綱（或從 prose 直接合成）</li>
+  <li>寫旁白草稿給您看，等您改</li>
+  <li>切成字幕陣列（subs.json）</li>
+  <li>跑 TTS 生 mp3</li>
+  <li>產 scenes.json + 合成 index.html</li>
+  <li>交付資料夾，您可以打開、可以丟主機、可以螢幕錄成 mp4</li>
+</ol>
+
+<h3>內建主題</h3>
+<dl>
+  <dt>government</dt>
+  <dd>深綠 + 米色。政府機關、衛生局、合規培訓。</dd>
+  <dt>product</dt>
+  <dd>Indigo + 天藍。SaaS demo、產品發表、銷售素材。</dd>
+  <dt>children</dt>
+  <dd>粉黃綠 + 大字。兒童故事、繪本、學齡教材。</dd>
+  <dt>corporate</dt>
+  <dd>海軍藍 + 灰。B2B 解說、leadership 簡報、投資人介紹。</dd>
+</dl>
+<p>切主題只要重跑 build_html.py 加 <code>--theme product</code>，<strong>不用重做 TTS、不用改場景內容</strong>。</p>
+</section>
+
+<!-- ─────────────────────────────────────────────────── -->
+<section id="quickstart">
+<h2><span class="num">5</span>Quick start：跑一遍 example</h2>
+
+<p>plugin 內附了一個小範例（睡前故事），確認管線跑得起來：</p>
+
+<pre><code>cd /Users/matt/labs/agent-skill-lab/narrated-deck/examples/minimal/
+
+<span class="cmt"># 1. 設 key（這 session 用）</span>
+export VOAI_API_KEY='iq-xxxxxxxx'
+
+<span class="cmt"># 2. 跑 TTS（9 段 mp3，約 30 秒）</span>
+python3 ../../skills/narrated-deck/scripts/tts_voai.py \
+  BEDTIME.subs.json \
+  --out audio/ \
+  --speaker 語安 \
+  --style 故事
+
+<span class="cmt"># 3. 開瀏覽器看（HTML 已經 build 好了）</span>
+open index.html
+
+<span class="cmt"># 4. 試試換主題</span>
+python3 ../../skills/narrated-deck/scripts/build_html.py \
+  --subs BEDTIME.subs.json \
+  --scenes scenes.json \
+  --theme corporate \
+  --out index.corporate.html
+open index.corporate.html</code></pre>
+
+<p>同一份內容，<code>--theme</code> 換一下就是不同視覺，audio 完全共用。</p>
+</section>
+
+<!-- ─────────────────────────────────────────────────── -->
+<section id="troubleshoot">
+<h2><span class="num">6</span>疑難排解</h2>
+
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>症狀</th><th>原因</th><th>解法</th></tr></thead>
+<tbody>
+<tr>
+  <td><code>ERROR: set VOAI_API_KEY env var</code></td>
+  <td>沒設環境變數</td>
+  <td>看上面「方法 A/B/C」</td>
+</tr>
+<tr>
+  <td>HTTP 401 / "invalid api key"</td>
+  <td>key 錯字、或過期</td>
+  <td>到 voai.ai 重生 key，更新 <code>~/.zshrc</code></td>
+</tr>
+<tr>
+  <td>HTTP 429 / "rate limit"</td>
+  <td>呼叫太快</td>
+  <td><code>tts_voai.py --sleep 1.0</code> 拉慢間隔</td>
+</tr>
+<tr>
+  <td>某字唸錯（例如「一疊」→「一爹」）</td>
+  <td>Voai 模型對某詞 mispronounce</td>
+  <td>改 subs.json 該段文字（換同義詞），<code>--only 023 --force</code> 只重生那一段</td>
+</tr>
+<tr>
+  <td>瀏覽器打開沒聲音</td>
+  <td>audio/ 沒跟 index.html 同目錄</td>
+  <td>把 audio/ 資料夾複製到 index.html 旁邊</td>
+</tr>
+<tr>
+  <td>HTML 字幕跟音檔不同步</td>
+  <td>subs.json 改了但 HTML 沒同步</td>
+  <td>跑 <code>scripts/sync_subs.py index.html PROJ.subs.json</code></td>
+</tr>
+<tr>
+  <td>Cloud Run 部署 403</td>
+  <td>OneDrive sync 把檔案改成 mode 600</td>
+  <td>Dockerfile 加 <code>chmod -R a+rX</code>（衛生局案有 reference）</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<!-- ─────────────────────────────────────────────────── -->
+<section id="license">
+<h2><span class="num">7</span>授權說明</h2>
+
+<dl>
+  <dt>IQT 內部</dt>
+  <dd>任何 IQT 員工 / 約聘可自由使用、修改、用於客戶專案。不需另外申請。</dd>
+
+  <dt>外部 / 客戶</dt>
+  <dd>目前 <strong>Proprietary</strong>。未經書面授權不得散佈或商業使用。詢價：<code>matt.jiang@iqtechnology.ai</code></dd>
+
+  <dt>未來規劃（README.md 已記）</dt>
+  <dd>
+    <ul style="margin-bottom: 0;">
+      <li><strong>Tier A</strong> — HTML player + extractor 開源 MIT（降低漏斗）</li>
+      <li><strong>Tier B</strong> — IQT 托管 TTS gateway，使用者不用自己拿 key，按分鐘計費</li>
+      <li><strong>Tier C</strong> — 企業客製主題 + 私有部署 + SLA，年度商業授權</li>
+    </ul>
+  </dd>
+</dl>
+
+<div class="box tip">
+  <div class="box-title"><span class="icon">💡</span> Tier B 解決 key 痛點</div>
+  <div>未來商業化版本，客戶不需要自己申請 Voai / ElevenLabs key。安裝完即可使用，IQT gateway 代呼 + 按使用計費。對非工程師使用者體驗無痛。</div>
+</div>
+</section>
+
+<div class="footer">
+  <strong>narrated-deck</strong> v0.1.0 ‧ 2026-06-05<br>
+  Built by Matt Jiang, IQT Technology Inc. ‧ matt.jiang@iqtechnology.ai<br>
+  Source: <code>/Users/matt/labs/agent-skill-lab/narrated-deck/</code>
+</div>
+
+</main>
+</body>
+</html>
