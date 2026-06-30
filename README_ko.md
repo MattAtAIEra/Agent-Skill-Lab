@@ -34,19 +34,43 @@ AI 코딩 에이전트, 분명 강력합니다. 하지만 규율 없이 풀어�
 # 1. 마켓플레이스 추가 (최초 1회)
 claude plugin marketplace add https://github.com/MattAtAIEra/Agent-Skill-Lab.git
 
-# 2. 필요한 플러그인 설치
+# 2. 필요한 플러그인 설치 (이름은 아래 표 참고)
 claude plugin install dev-discipline@agent-skill-lab
-claude plugin install sql-ddl-convention@agent-skill-lab
-claude plugin install skill-and-agent-authoring@agent-skill-lab
+claude plugin install narrated-deck@agent-skill-lab
+# …다른 플러그인도 동일한 형식:  <plugin-name>@agent-skill-lab
 ```
+
+> Claude Code 세션 안에서는 슬래시 명령으로도 가능합니다 — `/plugin marketplace add …`, `/plugin install …`, 그다음 `/reload-plugins`. `/plugin`을 실행하면 대화형 브라우저가 열립니다.
+
+## 업데이트
+
+플러그인은 `git pull`로 업데이트되지 **않습니다** — Claude Code가 `~/.claude/plugins/` 아래에 자체 관리 사본을 두기 때문에, 이 저장소를 직접 pull해도 아무 변화가 없습니다. 새 버전이 배포되면 Claude Code 안에서 새로고침하세요:
+
+```bash
+# 1. 이 마켓플레이스의 카탈로그 다시 가져오기
+claude plugin marketplace update agent-skill-lab
+
+# 2. 특정 플러그인을 최신 버전으로 업데이트
+claude plugin update narrated-deck@agent-skill-lab
+
+# 3. 새 버전 적용을 위해 다시 로드 (재시작 불필요)
+/reload-plugins
+```
+
+- **자동이 아닙니다:** 이 마켓플레이스 같은 서드파티 마켓플레이스는 자동 업데이트가 **기본적으로 꺼져 있습니다** — 업데이트는 수동 단계입니다(또는 `/plugin` UI에서 마켓플레이스별로 켜기).
+- **버전 기반:** 플러그인의 `version`(`plugin.json` 내)이 업데이트를 제어합니다 — 관리자가 버전을 올려야만 변경 사항이 전달되며, 버전을 올리지 않고 commit만 push하면 설치된 사본에는 반영되지 않습니다.
 
 ## 플러그인 목록
 
-| 플러그인 | 스킬 | 적용 규율 |
-|---------|------|----------|
+| 플러그인 | 스킬 | 기능 |
+|---------|------|------|
 | **dev-discipline** | `api-dev-workflow` `command-execution` `dev-log` | 스펙 우선 API 개발, 안전한 명령어 실행, 구조화된 개발 로그 |
 | **sql-ddl-convention** | `sql-ddl-convention` | DDL 설계 표준 — 감사 컬럼, 인덱스, 네이밍 규칙, Mermaid ERD 생성 |
 | **skill-and-agent-authoring** | `skill-and-agent-authoring` | 새 플러그인 작성을 위한 YAML 프론트매터 및 디렉토리 구조 가이드 |
+| **narrated-deck** | `narrated-deck` | PPT/PDF/개요를 독립 실행형 내레이션 HTML 페이지로 변환 — 자막별 TTS 음성, 장면 전환, 내장 플레이어 |
+| **research-discipline** | `government-research-stance` | 정부 위탁 연구를 기술 자문 입장으로 유지하고, 입법/규제 역할로의 월권을 방지 |
+| **deploy-preflight** | `deploy-preflight` | 운영 배포 프리플라이트 — 대상 호스트 리소스를 진단하고 배포 스크립트에 안전장치를 통합 |
+| **notebooklm-cleaner** | `notebooklm-watermark-remover` | 내보낸 PDF에서 NotebookLM 워터마크 제거 |
 
 ### dev-discipline
 
@@ -78,7 +102,11 @@ agent-skill-lab/
 ├── plugins/
 │   ├── dev-discipline/         # API 워크플로, 명령어 안전성, 개발 로그
 │   ├── sql-ddl-convention/     # SQL DDL 표준 + Mermaid ERD
-│   └── skill-and-agent-authoring/  # 플러그인 작성 가이드
+│   ├── skill-and-agent-authoring/  # 플러그인 작성 가이드
+│   ├── narrated-deck/          # PPT/PDF/개요 → 내레이션 HTML 페이지 (TTS)
+│   ├── research-discipline/    # 정부 연구 입장과 어조
+│   ├── deploy-preflight/       # 운영 배포 프리플라이트 점검
+│   └── notebooklm-cleaner/     # NotebookLM PDF 워터마크 제거
 ├── banner.svg
 └── README.md
 ```

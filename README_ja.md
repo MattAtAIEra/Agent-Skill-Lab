@@ -34,19 +34,43 @@ AIコーディングエージェントは優秀です。ただし手綱を緩め
 # 1. マーケットプレイスを追加（初回のみ）
 claude plugin marketplace add https://github.com/MattAtAIEra/Agent-Skill-Lab.git
 
-# 2. 必要なプラグインをインストール
+# 2. 必要なプラグインをインストール（名前は下の表を参照）
 claude plugin install dev-discipline@agent-skill-lab
-claude plugin install sql-ddl-convention@agent-skill-lab
-claude plugin install skill-and-agent-authoring@agent-skill-lab
+claude plugin install narrated-deck@agent-skill-lab
+# …他のプラグインも同じ形式：  <plugin-name>@agent-skill-lab
 ```
+
+> Claude Code セッション内では slash コマンドでも操作できます——`/plugin marketplace add …`、`/plugin install …`、その後 `/reload-plugins`。`/plugin` で対話的ブラウザが開きます。
+
+## 更新
+
+プラグインは `git pull` では更新**されません**。Claude Code は `~/.claude/plugins/` 配下に独自の管理コピーを保持するため、このリポジトリを手動で pull しても何も変わりません。新バージョンが公開されたら、Claude Code 内で再取得してください：
+
+```bash
+# 1. このマーケットプレイスのカタログを再取得
+claude plugin marketplace update agent-skill-lab
+
+# 2. プラグインを最新バージョンに更新
+claude plugin update narrated-deck@agent-skill-lab
+
+# 3. 再読み込みして新バージョンを反映（再起動不要）
+/reload-plugins
+```
+
+- **自動ではありません**：本マーケットプレイスのようなサードパーティ市場は自動更新が**デフォルトで無効**です。更新は手動（または `/plugin` UI からマーケットプレイスごとに有効化）。
+- **バージョン管理**：プラグインの `version`（`plugin.json` 内）が更新を制御します。メンテナーがバージョンを上げない限り変更は届かず、バージョンを上げずに commit を push してもインストール済みコピーには反映されません。
 
 ## プラグイン一覧
 
-| プラグイン | スキル | 規律の内容 |
-|-----------|--------|-----------|
+| プラグイン | スキル | 機能 |
+|-----------|--------|------|
 | **dev-discipline** | `api-dev-workflow` `command-execution` `dev-log` | 仕様駆動API開発、安全なコマンド実行、構造化開発ログ |
 | **sql-ddl-convention** | `sql-ddl-convention` | DDL設計標準——監査カラム、インデックス、命名規約、Mermaid ERD生成 |
 | **skill-and-agent-authoring** | `skill-and-agent-authoring` | プラグイン作成のためのYAMLフロントマターとディレクトリ構成ガイド |
+| **narrated-deck** | `narrated-deck` | PPT／PDF／アウトラインを自己完結型のナレーション付きHTMLページに——字幕ごとのTTS音声、シーン遷移、内蔵プレーヤー |
+| **research-discipline** | `government-research-stance` | 政府委託研究を技術スタッフの立場に保ち、立法・規制側への越境を防ぐ |
+| **deploy-preflight** | `deploy-preflight` | 本番デプロイのプリフライト——対象ホストのリソースを診断し、デプロイスクリプトに安全策を組み込む |
+| **notebooklm-cleaner** | `notebooklm-watermark-remover` | エクスポートしたPDFからNotebookLMの透かしを除去 |
 
 ### dev-discipline
 
@@ -78,7 +102,11 @@ agent-skill-lab/
 ├── plugins/
 │   ├── dev-discipline/         # APIワークフロー、コマンド安全性、開発ログ
 │   ├── sql-ddl-convention/     # SQL DDL標準 + Mermaid ERD
-│   └── skill-and-agent-authoring/  # プラグイン作成ガイド
+│   ├── skill-and-agent-authoring/  # プラグイン作成ガイド
+│   ├── narrated-deck/          # PPT/PDF/アウトライン → ナレーション付きHTML（TTS）
+│   ├── research-discipline/    # 政府研究のスタンスと論調
+│   ├── deploy-preflight/       # 本番デプロイのプリフライトチェック
+│   └── notebooklm-cleaner/     # NotebookLMのPDF透かしを除去
 ├── banner.svg
 └── README.md
 ```

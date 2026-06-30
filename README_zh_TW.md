@@ -34,19 +34,43 @@ AI 寫程式確實猛——但沒人管的話，它會跳規格、漏測試、�
 # 1. 加入市集（只需一次）
 claude plugin marketplace add https://github.com/MattAtAIEra/Agent-Skill-Lab.git
 
-# 2. 安裝你需要的插件
+# 2. 安裝你需要的插件（名稱見下方表格）
 claude plugin install dev-discipline@agent-skill-lab
-claude plugin install sql-ddl-convention@agent-skill-lab
-claude plugin install skill-and-agent-authoring@agent-skill-lab
+claude plugin install narrated-deck@agent-skill-lab
+# …其他插件同樣格式：  <plugin-name>@agent-skill-lab
 ```
+
+> 在 Claude Code 工作階段內，可改用 slash 指令——`/plugin marketplace add …`、`/plugin install …`，再 `/reload-plugins`。執行 `/plugin` 可開啟互動式瀏覽器。
+
+## 更新
+
+插件**不是**用 `git pull` 更新的——Claude Code 會自行在 `~/.claude/plugins/` 下維護一份複本，所以手動 pull 這個 repo 不會有任何效果。發布新版本後，請在 Claude Code 內重新整理：
+
+```bash
+# 1. 重新抓取本市集的目錄
+claude plugin marketplace update agent-skill-lab
+
+# 2. 把指定插件更新到最新版
+claude plugin update narrated-deck@agent-skill-lab
+
+# 3. 重新載入讓新版生效（不需重開）
+/reload-plugins
+```
+
+- **非自動**：像本市集這類第三方市集，自動更新**預設關閉**——更新是手動步驟（或在 `/plugin` UI 內逐一市集開啟）。
+- **版本控管**：插件的 `version`（位於 `plugin.json`）決定能否更新——維護者沒 bump 版本，你就收不到變更；只 push commit 而不改版本，已安裝的複本不會更新。
 
 ## 插件一覽
 
-| 插件 | Skills | 規範內容 |
-|------|--------|---------|
+| 插件 | Skills | 功能 |
+|------|--------|------|
 | **dev-discipline** | `api-dev-workflow` `command-execution` `dev-log` | 規格先行 API 開發、安全指令執行、結構化開發日誌 |
 | **sql-ddl-convention** | `sql-ddl-convention` | DDL 設計標準——審計欄位、索引、命名、Mermaid ERD 產出 |
 | **skill-and-agent-authoring** | `skill-and-agent-authoring` | 撰寫新插件的 YAML frontmatter 與目錄結構指引 |
+| **narrated-deck** | `narrated-deck` | 把 PPT／PDF／大綱變成自帶旁白的 HTML 頁面——逐字幕 TTS 語音、場景轉場、內建播放器 |
+| **research-discipline** | `government-research-stance` | 讓政府委託研究維持技術幕僚身段，避免越界扮演立法／立規範角色 |
+| **deploy-preflight** | `deploy-preflight` | 上線前置檢查——診斷目標主機資源，把防護措施寫進部署腳本 |
+| **notebooklm-cleaner** | `notebooklm-watermark-remover` | 移除 NotebookLM 匯出 PDF 的浮水印 |
 
 ### dev-discipline
 
@@ -78,7 +102,11 @@ agent-skill-lab/
 ├── plugins/
 │   ├── dev-discipline/         # API 流程、指令安全、開發日誌
 │   ├── sql-ddl-convention/     # SQL DDL 標準 + Mermaid ERD
-│   └── skill-and-agent-authoring/  # 插件撰寫指南
+│   ├── skill-and-agent-authoring/  # 插件撰寫指南
+│   ├── narrated-deck/          # PPT/PDF/大綱 → 旁白 HTML 頁面（TTS）
+│   ├── research-discipline/    # 政府研究身段與口吻
+│   ├── deploy-preflight/       # 上線前置檢查
+│   └── notebooklm-cleaner/     # 移除 NotebookLM PDF 浮水印
 ├── banner.svg
 └── README.md
 ```

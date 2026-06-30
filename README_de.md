@@ -34,19 +34,43 @@ KI-Coding-Agenten sind beeindruckend produktiv — solange man nicht genau hinsc
 # 1. Marktplatz hinzufügen (einmalig)
 claude plugin marketplace add https://github.com/MattAtAIEra/Agent-Skill-Lab.git
 
-# 2. Benötigte Plugins installieren
+# 2. Benötigte Plugins installieren (Namen siehe Tabelle unten)
 claude plugin install dev-discipline@agent-skill-lab
-claude plugin install sql-ddl-convention@agent-skill-lab
-claude plugin install skill-and-agent-authoring@agent-skill-lab
+claude plugin install narrated-deck@agent-skill-lab
+# …gleiches Schema für jedes weitere Plugin:  <plugin-name>@agent-skill-lab
 ```
+
+> In einer Claude-Code-Sitzung gehen auch die Slash-Befehle — `/plugin marketplace add …`, `/plugin install …`, danach `/reload-plugins`. `/plugin` öffnet einen interaktiven Browser.
+
+## Aktualisieren
+
+Plugins werden **nicht** per `git pull` aktualisiert — Claude Code hält unter `~/.claude/plugins/` eine eigene verwaltete Kopie, ein manuelles Pullen dieses Repos bewirkt daher nichts. Nach der Veröffentlichung einer neuen Version aktualisierst du innerhalb von Claude Code:
+
+```bash
+# 1. Katalog dieses Marktplatzes neu laden
+claude plugin marketplace update agent-skill-lab
+
+# 2. Ein Plugin auf die neueste Version aktualisieren
+claude plugin update narrated-deck@agent-skill-lab
+
+# 3. Neu laden, damit die neue Version wirksam wird (kein Neustart nötig)
+/reload-plugins
+```
+
+- **Nicht automatisch:** Bei Drittanbieter-Marktplätzen wie diesem ist die automatische Aktualisierung **standardmäßig deaktiviert** — Aktualisieren ist ein manueller Schritt (oder pro Marktplatz über die `/plugin`-Oberfläche aktivieren).
+- **Versionsgesteuert:** Die `version` eines Plugins (in seiner `plugin.json`) steuert Updates — du erhältst Änderungen nur, wenn der Maintainer sie hochzählt; Commits ohne Versionssprung erreichen installierte Kopien nicht.
 
 ## Plugins
 
-| Plugin | Skills | Erzwungene Disziplin |
-|--------|--------|---------------------|
+| Plugin | Skills | Funktion |
+|--------|--------|----------|
 | **dev-discipline** | `api-dev-workflow` `command-execution` `dev-log` | Spec-first-API-Entwicklung, sichere Befehlsausführung, strukturiertes Entwicklungsprotokoll |
 | **sql-ddl-convention** | `sql-ddl-convention` | DDL-Designstandards — Audit-Felder, Indizes, Namenskonventionen, Mermaid-ERD-Generierung |
 | **skill-and-agent-authoring** | `skill-and-agent-authoring` | Korrekte YAML-Frontmatter und Verzeichnisstruktur für die Plugin-Erstellung |
+| **narrated-deck** | `narrated-deck` | Verwandelt PPT/PDF/Gliederung in eine eigenständige narrierte HTML-Seite — TTS-Audio pro Untertitel, Szenenübergänge, eingebauter Player |
+| **research-discipline** | `government-research-stance` | Hält staatlich beauftragte Forschung in der Rolle des technischen Stabs und verhindert Übergriffe in legislative/regulatorische Rollen |
+| **deploy-preflight** | `deploy-preflight` | Preflight-Check für Produktiv-Deployments — Ressourcen des Zielhosts prüfen und Schutzmaßnahmen in Deploy-Skripte einbauen |
+| **notebooklm-cleaner** | `notebooklm-watermark-remover` | Entfernt das NotebookLM-Wasserzeichen aus exportierten PDFs |
 
 ### dev-discipline
 
@@ -78,7 +102,11 @@ agent-skill-lab/
 ├── plugins/
 │   ├── dev-discipline/         # API-Workflow, Befehlssicherheit, Entwicklungsprotokoll
 │   ├── sql-ddl-convention/     # SQL-DDL-Standards + Mermaid-ERD
-│   └── skill-and-agent-authoring/  # Plugin-Erstellungsanleitung
+│   ├── skill-and-agent-authoring/  # Plugin-Erstellungsanleitung
+│   ├── narrated-deck/          # PPT/PDF/Gliederung → narrierte HTML-Seite (TTS)
+│   ├── research-discipline/    # Haltung & Ton für Regierungsforschung
+│   ├── deploy-preflight/       # Preflight-Checks für Produktiv-Deployments
+│   └── notebooklm-cleaner/     # NotebookLM-Wasserzeichen aus PDFs entfernen
 ├── banner.svg
 └── README.md
 ```
