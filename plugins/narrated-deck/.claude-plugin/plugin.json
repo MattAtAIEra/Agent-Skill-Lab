@@ -8,7 +8,7 @@
     "url": "https://iqtechnology.ai"
   },
   "homepage": "https://github.com/iqtechnology/narrated-deck",
-  "license": "Proprietary",
+  "license": "MIT",
   "keywords": [
     "tts",
     "narration",
